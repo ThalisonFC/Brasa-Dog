@@ -1,0 +1,15 @@
+@import './styles/index.css';
+
+@keyframes badge-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+.badge-pulse {
+  animation: badge-pulse 1.5s ease-in-out infinite;
+}
