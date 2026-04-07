@@ -56,7 +56,7 @@ export function LoginCliente() {
           Entrar
         </h1>
         <p className="mb-6 text-center text-sm text-muted-foreground">
-          Sua conta fica salva neste navegador (sem servidor).
+          Sua conta usa autenticação e sessão do Supabase.
         </p>
         <div className="mb-6 rounded-lg border border-primary/30 bg-primary/10 p-3 text-sm">
           <p className="font-semibold text-primary">Acesso admin (pelo mesmo Entrar):</p>
@@ -107,3 +107,4 @@ export function LoginCliente() {
     </div>
   );
 }
+

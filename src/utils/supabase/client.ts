@@ -1,7 +1,5 @@
 import { createClient as createSupabaseClient, type SupabaseClient } from '@supabase/supabase-js';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
+import { supabaseConfig } from '@/config/supabase';
 
 let browserClient: SupabaseClient | undefined;
 
@@ -11,12 +9,7 @@ let browserClient: SupabaseClient | undefined;
  */
 export function createClient(): SupabaseClient {
   if (browserClient) return browserClient;
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error(
-      'Defina VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY no .env.local'
-    );
-  }
-  browserClient = createSupabaseClient(supabaseUrl, supabaseKey, {
+  browserClient = createSupabaseClient(supabaseConfig.url, supabaseConfig.publishableKey, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,

@@ -3,6 +3,7 @@ import { settingsService } from '@/services/settings.service';
 import { contentService } from '@/services/content.service';
 import { productsService } from '@/services/products.service';
 import { ordersService } from '@/services/orders.service';
+import { authService } from '@/services/auth.service';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
@@ -62,10 +63,10 @@ export function AdminSettings() {
       showToast({ type: 'error', message: 'Confirmação não confere.' });
       return;
     }
-    await settingsService.updateSettings({ adminPasswordPlain: password });
+    await authService.updatePassword(password);
     setPassword('');
     setPasswordConfirm('');
-    showToast({ type: 'success', message: 'Senha atualizada (armazenamento local).' });
+    showToast({ type: 'success', message: 'Senha da conta admin atualizada no Supabase.' });
   };
 
   const saveWhatsapp = async () => {
@@ -127,7 +128,7 @@ export function AdminSettings() {
       <section className="rounded-lg border border-border bg-card p-6">
         <h2 className="mb-4 text-lg font-semibold text-primary">Segurança</h2>
         <p className="mb-4 text-sm text-muted-foreground">
-          Mock local — substitua por autenticação segura em produção.
+          Atualiza a senha da sessão administrativa atual no Supabase Auth.
         </p>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
@@ -255,25 +256,12 @@ export function AdminSettings() {
         </div>
       </section>
 
-      <section className="rounded-lg border border-border bg-card p-6 opacity-80">
-        <h2 className="mb-4 text-lg font-semibold text-primary">Supabase (futuro)</h2>
-        <p className="mb-4 text-sm text-muted-foreground">Status: Usando armazenamento local</p>
-        <div className="grid gap-4 md:grid-cols-2">
-          <input
-            disabled
-            placeholder="URL do projeto Supabase"
-            className="w-full cursor-not-allowed rounded-lg border border-border bg-muted px-3 py-2 opacity-60"
-          />
-          <input
-            disabled
-            placeholder="API Key"
-            className="w-full cursor-not-allowed rounded-lg border border-border bg-muted px-3 py-2 opacity-60"
-          />
-        </div>
-        <Button type="button" disabled className="mt-4 px-4 py-2 opacity-60">
-          Conectar
-        </Button>
-        {/* TODO: Integrar Supabase auth e database */}
+      <section className="rounded-lg border border-border bg-card p-6">
+        <h2 className="mb-4 text-lg font-semibold text-primary">Supabase</h2>
+        <p className="text-sm text-muted-foreground">
+          Banco de dados e autenticação ativos via Supabase. Garanta que o SQL de `supabase/schema.sql`
+          foi executado no projeto para permissões e tabelas.
+        </p>
       </section>
     </div>
   );

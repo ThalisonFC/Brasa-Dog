@@ -1,7 +1,5 @@
 import type { AppSettings } from '@/types';
-import { storageService } from './storage.service';
-
-const KEY = 'brasadog_settings';
+import { createClient } from '@/utils/supabase/client';
 
 const defaultSettings: AppSettings = {
   maintenanceMode: false,
@@ -11,22 +9,46 @@ const defaultSettings: AppSettings = {
   deliveryEstimateText: '45 minutos a 1 hora',
 };
 
-// TODO: Substituir por Supabase quando integrado
+type SettingsRow = {
+  id: number;
+  payload: AppSettings;
+};
 
-function delay<T>(value: T, ms = 200): Promise<T> {
-  return new Promise((resolve) => setTimeout(() => resolve(value), ms));
+async function ensureSeededSettings(): Promise<void> {
+  const supabase = createClient();
+  const { data, error } = await supabase.from('app_settings').select('id').eq('id', 1).maybeSingle();
+  if (error) throw new Error(error.message);
+  if (data) return;
+  const { error: insertError } = await supabase.from('app_settings').insert({
+    id: 1,
+    payload: defaultSettings,
+  });
+  if (insertError) throw new Error(insertError.message);
 }
 
 export const settingsService = {
   async getSettings(): Promise<AppSettings> {
-    const s = storageService.get<AppSettings>(KEY);
-    return delay({ ...defaultSettings, ...s });
+    await ensureSeededSettings();
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from('app_settings')
+      .select('id, payload')
+      .eq('id', 1)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    const row = data as SettingsRow | null;
+    return { ...defaultSettings, ...(row?.payload ?? {}) };
   },
 
   async updateSettings(partial: Partial<AppSettings>): Promise<AppSettings> {
-    const current = { ...defaultSettings, ...storageService.get<AppSettings>(KEY) };
+    const current = await this.getSettings();
     const next = { ...current, ...partial };
-    storageService.set(KEY, next);
-    return delay({ ...next });
+    const supabase = createClient();
+    const { error } = await supabase.from('app_settings').upsert({
+      id: 1,
+      payload: next,
+    });
+    if (error) throw new Error(error.message);
+    return { ...next };
   },
 };

@@ -50,14 +50,24 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(adminReducer, initialState);
 
   useEffect(() => {
-    dispatch({ type: 'SET_LOADING', payload: true });
-    const session = authService.getSession();
-    if (session && authService.validateSession(session.token)) {
-      dispatch({ type: 'LOGIN_SUCCESS', payload: session });
-    } else {
-      dispatch({ type: 'LOGOUT' });
-    }
-    dispatch({ type: 'SET_LOADING', payload: false });
+    let mounted = true;
+    void (async () => {
+      dispatch({ type: 'SET_LOADING', payload: true });
+      try {
+        const session = await authService.getSession();
+        if (!mounted) return;
+        if (session) {
+          dispatch({ type: 'LOGIN_SUCCESS', payload: session });
+        } else {
+          dispatch({ type: 'LOGOUT' });
+        }
+      } finally {
+        if (mounted) dispatch({ type: 'SET_LOADING', payload: false });
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const login = useCallback(async (credentials: LoginFormData) => {

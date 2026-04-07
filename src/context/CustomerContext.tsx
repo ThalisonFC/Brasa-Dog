@@ -56,14 +56,24 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(customerReducer, initialState);
 
   useEffect(() => {
-    dispatch({ type: 'CUSTOMER_SET_LOADING', payload: true });
-    const session = customerAuthService.getSession();
-    if (session && customerAuthService.validateSession(session.token)) {
-      dispatch({ type: 'CUSTOMER_LOGIN_SUCCESS', payload: session });
-    } else {
-      dispatch({ type: 'CUSTOMER_LOGOUT' });
-    }
-    dispatch({ type: 'CUSTOMER_SET_LOADING', payload: false });
+    let mounted = true;
+    void (async () => {
+      dispatch({ type: 'CUSTOMER_SET_LOADING', payload: true });
+      try {
+        const session = await customerAuthService.getSession();
+        if (!mounted) return;
+        if (session) {
+          dispatch({ type: 'CUSTOMER_LOGIN_SUCCESS', payload: session });
+        } else {
+          dispatch({ type: 'CUSTOMER_LOGOUT' });
+        }
+      } finally {
+        if (mounted) dispatch({ type: 'CUSTOMER_SET_LOADING', payload: false });
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {

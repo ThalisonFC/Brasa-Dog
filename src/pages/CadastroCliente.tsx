@@ -56,7 +56,7 @@ export function CadastroCliente() {
           Criar conta
         </h1>
         <p className="mb-6 text-center text-sm text-muted-foreground">
-          Cadastro apenas neste aparelho (localStorage). Sem banco de dados.
+          Cadastro com Supabase (dados sincronizados no banco).
         </p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
@@ -133,3 +133,4 @@ export function CadastroCliente() {
     </div>
   );
 }
+
