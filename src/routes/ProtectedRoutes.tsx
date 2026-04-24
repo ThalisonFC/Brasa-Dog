@@ -6,7 +6,7 @@ export function ProtectedRoutes() {
   const { isAuthenticated, isLoading, session } = useAdmin();
 
   if (isLoading) {
-    return <Spinner fullscreen label="Verificando sessão" />;
+    return <Spinner fullscreen label="Verificando sessao" />;
   }
 
   if (!session || !isAuthenticated) {

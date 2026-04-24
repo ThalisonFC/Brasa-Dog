@@ -128,7 +128,7 @@ export function AdminSettings() {
       <section className="rounded-lg border border-border bg-card p-6">
         <h2 className="mb-4 text-lg font-semibold text-primary">Segurança</h2>
         <p className="mb-4 text-sm text-muted-foreground">
-          Atualiza a senha da sessão administrativa atual no Supabase Auth.
+          Atualiza a senha da sessao administrativa atual no Supabase Auth.
         </p>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
@@ -259,7 +259,7 @@ export function AdminSettings() {
       <section className="rounded-lg border border-border bg-card p-6">
         <h2 className="mb-4 text-lg font-semibold text-primary">Supabase</h2>
         <p className="text-sm text-muted-foreground">
-          Banco de dados e autenticação ativos via Supabase. Garanta que o SQL de `supabase/schema.sql`
+          Banco de dados e autenticacao ativos via Supabase. Garanta que o SQL de `supabase/schema.sql`
           foi executado no projeto para permissões e tabelas.
         </p>
       </section>
