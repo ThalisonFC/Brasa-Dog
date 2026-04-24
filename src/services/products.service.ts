@@ -89,16 +89,25 @@ async function seedIfEmpty(): Promise<void> {
   if (insertError) throw new Error(insertError.message);
 }
 
+function fallbackProducts(): Product[] {
+  return menuProducts.map((p) => ensureCustomization({ ...p }));
+}
+
 export const productsService = {
   async getProducts(): Promise<Product[]> {
-    await seedIfEmpty();
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from('app_products')
-      .select('*')
-      .order('created_at', { ascending: true });
-    if (error) throw new Error(error.message);
-    return (data as ProductRow[]).map(toProduct);
+    try {
+      await seedIfEmpty();
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from('app_products')
+        .select('*')
+        .order('created_at', { ascending: true });
+      if (error) throw new Error(error.message);
+      return (data as ProductRow[]).map(toProduct);
+    } catch {
+      // Mantém o cardápio público funcionando enquanto o schema/policies do Supabase não estão prontos.
+      return fallbackProducts();
+    }
   },
 
   async getProductById(id: string): Promise<Product | null> {
