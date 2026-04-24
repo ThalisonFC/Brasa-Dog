@@ -58,11 +58,6 @@ export function LoginCliente() {
         <p className="mb-6 text-center text-sm text-muted-foreground">
           Sua conta usa autenticação e sessão do Supabase.
         </p>
-        <div className="mb-6 rounded-lg border border-primary/30 bg-primary/10 p-3 text-sm">
-          <p className="font-semibold text-primary">Acesso admin (pelo mesmo Entrar):</p>
-          <p className="text-foreground">E-mail: admin@brasadog.com</p>
-          <p className="text-foreground">Senha: BrasaDog@2024</p>
-        </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label htmlFor="cli-email" className="mb-1 block text-sm text-muted-foreground">
