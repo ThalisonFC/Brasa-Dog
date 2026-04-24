@@ -17,10 +17,12 @@ function assertSupabaseUrl(value: string): string {
   return value;
 }
 
-export const supabaseConfig = {
-  url: assertSupabaseUrl(assertEnv(supabaseUrl, 'VITE_SUPABASE_URL')),
-  publishableKey: assertEnv(
-    supabasePublishableKey,
-    'VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY'
-  ),
-};
+export function getSupabaseConfig() {
+  return {
+    url: assertSupabaseUrl(assertEnv(supabaseUrl, 'VITE_SUPABASE_URL')),
+    publishableKey: assertEnv(
+      supabasePublishableKey,
+      'VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY'
+    ),
+  };
+}

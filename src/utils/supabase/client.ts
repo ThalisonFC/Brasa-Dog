@@ -1,5 +1,5 @@
 import { createClient as createSupabaseClient, type SupabaseClient } from '@supabase/supabase-js';
-import { supabaseConfig } from '@/config/supabase';
+import { getSupabaseConfig } from '@/config/supabase';
 
 let browserClient: SupabaseClient | undefined;
 
@@ -9,6 +9,7 @@ let browserClient: SupabaseClient | undefined;
  */
 export function createClient(): SupabaseClient {
   if (browserClient) return browserClient;
+  const supabaseConfig = getSupabaseConfig();
   browserClient = createSupabaseClient(supabaseConfig.url, supabaseConfig.publishableKey, {
     auth: {
       persistSession: true,
