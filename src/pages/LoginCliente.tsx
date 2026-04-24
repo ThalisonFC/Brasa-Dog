@@ -41,7 +41,7 @@ export function LoginCliente() {
         await loginAdmin({ email: data.email, password: data.password });
         navigate('/admin/dashboard', { replace: true });
       } catch {
-        setError('root', { message: 'E-mail ou senha invÃ¡lidos.' });
+        setError('root', { message: 'E-mail ou senha invalidos.' });
       }
     }
   };
@@ -55,9 +55,6 @@ export function LoginCliente() {
         >
           Entrar
         </h1>
-        <p className="mb-6 text-center text-sm text-muted-foreground">
-          Sua conta usa autenticação e sessão do Supabase.
-        </p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label htmlFor="cli-email" className="mb-1 block text-sm text-muted-foreground">
@@ -89,11 +86,11 @@ export function LoginCliente() {
             </p>
           ) : null}
           <Button type="submit" disabled={isLoading || isLoadingAdmin} className="w-full py-3">
-            {isLoading || isLoadingAdmin ? 'Entrandoâ€¦' : 'Entrar'}
+            {isLoading || isLoadingAdmin ? 'Entrando...' : 'Entrar'}
           </Button>
         </form>
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          NÃ£o tem conta?{' '}
+          Nao tem conta?{' '}
           <Link to="/cadastro" className="font-semibold text-primary hover:underline">
             Cadastre-se
           </Link>
